@@ -2,7 +2,7 @@ import customtkinter as ctk
 from PIL import Image
 
 from funcoes_docx.funcoes_cadastro import carregarTemplate, escolher_e_salvar_assinatura
-
+from funcoes_cadastro_visual import acionar_cadastro
 
 
 #BOTOES E ICONES
@@ -42,12 +42,12 @@ def criar_btn_visualizar(quadro_lateral, quadro_central, quadro_principal,visual
 
     botao.pack(pady=5,padx=15)
 
-def criar_btn_gerar(quadro_lateral, quadro_central,quadro_principal, gerarRelatorio):
-    icone_btn_gerar = ctk.CTkImage(light_image=Image.open("imagens/iconeGerarRelatorio.png"),
-                                   dark_image=Image.open("imagens/iconeGerarRelatorio.png"),
-                                   size=(60, 60))
+def criar_btn_cadastrarProfessor(quadro_lateral, quadro_central,quadro_principal, gerarRelatorio):
+    icone_btn_gerar = ctk.CTkImage(light_image=Image.open("imagens/iconeProfessor.png"),
+                                   dark_image=Image.open("imagens/iconeProfessor.png"),
+                                   size=(70, 70))
 
-    botao = ctk.CTkButton(quadro_lateral, text="GERAR RELATÓRIO",
+    botao = ctk.CTkButton(quadro_lateral, text="CADASTRAR PROFESSOR",
                   font=("roboto", 14),
                   width=300, height=55,
                   corner_radius=8,
@@ -55,7 +55,7 @@ def criar_btn_gerar(quadro_lateral, quadro_central,quadro_principal, gerarRelato
                   hover_color="#334155",
                   image=icone_btn_gerar,
                   compound="left", anchor="w", border_spacing=15,
-                          command=lambda:(gerarRelatorio(quadro_central, quadro_principal), selecionar_btn(botao)))
+                          command=lambda:(acionar_cadastro(), selecionar_btn(botao)))
     botao.pack(pady=5,padx=15)
 
 def criar_btn_inserirAss(quadro_lateral, quadro_central,quadro_principal, inserirAss,usuario):
