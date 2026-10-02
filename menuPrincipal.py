@@ -45,7 +45,7 @@ def menu_principal(janela,usuario, login):
 
     criar_btn_visualizar(frame_Menu, quadro_central,quadro_principal,visualizarConteudo, usuario)
 
-    criar_btn_gerar(frame_Menu, quadro_central,quadro_principal, gerarRelatorio)
+    criar_btn_cadastrarProfessor(frame_Menu, quadro_central, quadro_principal, gerarRelatorio)
 
     criar_btn_inserirAss(frame_Menu, quadro_central, quadro_principal,inserirAss,usuario)
 

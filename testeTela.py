@@ -1,5 +1,3 @@
-import docx
+from funcoes_docx.funcoes_cadastro import acionar_cadastro
 
-from componentes.conteiners_visualizarRelatorio import corpoTabela
-
-corpoTabela()
+acionar_cadastro()

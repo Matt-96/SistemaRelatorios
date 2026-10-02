@@ -234,48 +234,6 @@ def buscar_caminho_assinatura(usuario):
 
     return  None
 
-def acionar_cadastro():
-    #1 PEDE O NOME DO USUARIO
-    dialogo_usuario  = ctk.CTkInputDialog(title="Cadastro", text="Digite o nome do Professor:")
-    usuario = dialogo_usuario.get_input()
-
-    if not usuario: #Se o usuário não preencher nada ou clicar em cancelar
-        return
-    dialogo_senha = ctk.CTkInputDialog(title="Cadastro", text="Digite a senha do Professor:")
-    senha = dialogo_senha.get_input()
-    if not senha:
-        return
-    #Manda para a função de Cadastro
-    sucesso = cadastrarProfessor(usuario, senha)
-
-   #verificar se sucesso é verdadeiro ou falso
-    print(bool(sucesso))
-    if sucesso:
-        caminho_pasta = criar_pasta_professor(usuario)
-        adiciona_template(usuario,caminho_pasta)
-
-
-
-def adiciona_template(usuario, caminho_pasta):
-    #PEDE OS ARQUIVOS DE TEMPLATE
-    arquivos_selecionados = filedialog.askopenfilenames(title=f"Selecione os templates para o Professor{usuario}",
-                                                       filetypes=[("Arquivos Word","*.docx")])
-    #SE O USUARIO NÃO SELECIONAR NEHUM ARQUIVO
-    if not arquivos_selecionados:
-        messagebox.showwarning("Cadastro","Nenhum Arquivo foi selecionado.")
-        return False
-    #ELE COPIA OS ARQUIVOS PARA PASTA DO PROFESSOR
-    try:
-        for arquivo in arquivos_selecionados:
-            shutil.copy(arquivo,caminho_pasta)
-
-        atualizar_caminho_pasta(usuario,caminho_pasta)
-        messagebox.showinfo("Cadastro","Templates Cadastrados com Sucesso!")
-        return True
-    except Exception as Erro:
-        messagebox.showerror("Erro", f"Falha ao copiar os arquivos: {Erro}")
-        return False
-
 
 def criar_pasta_professor(usuario):
     pasta_raiz = os.path.dirname(os.path.dirname(__file__))  # Ajusta a pasta raiz
@@ -284,3 +242,6 @@ def criar_pasta_professor(usuario):
     os.makedirs(pasta_professor,exist_ok=True)
 
     return pasta_professor
+
+def criar_pasta_disciplina(disciplina):
+    pass
