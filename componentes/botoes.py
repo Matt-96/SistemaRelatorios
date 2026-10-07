@@ -3,76 +3,88 @@ from PIL import Image
 
 from funcoes_docx.funcoes_cadastro import carregarTemplate, escolher_e_salvar_assinatura
 from funcoes_cadastro_visual import acionar_cadastro
+from tela_professores import visualizarProfessores
 
+# CONSTANTES DE PADRONIZAÇÃO VISUAL DA BARRA LATERAL
+ALTURA_BOTAO_MENU = 58
+TAMANHO_ICONE_MENU = (40, 40)
+COR_BOTAO_PADRAO = "#1E293B"
+COR_BOTAO_HOVER = "#334155"
+COR_BOTAO_SELECIONADO = "#263B63"
+COR_TEXTO_PADRAO = "#F8FAFC"
 
-#BOTOES E ICONES
-def criar_btn_cadastro(quadro_lateral, quadro_central,quadro_principal,cadastrarConteudo,usuario):
+def _criar_item_menu_padrao(quadro_lateral, texto, icone_path, comando=None, font_size=13):
+    """Fábrica interna para garantir padronização rigorosa de todos os botões do menu."""
+    icone = ctk.CTkImage(
+        light_image=Image.open(icone_path),
+        dark_image=Image.open(icone_path),
+        size=TAMANHO_ICONE_MENU
+    )
 
-    icone_btn_cadastrar = ctk.CTkImage(light_image=Image.open("imagens/iconeCadastrar.png"),
-                                       dark_image=Image.open("imagens/iconeCadastrar.png"),
-                                       size=(60, 60))
+    botao = ctk.CTkButton(
+        quadro_lateral,
+        text=texto,
+        font=("Roboto", font_size, "bold"),
+        height=ALTURA_BOTAO_MENU,
+        corner_radius=8,
+        fg_color=COR_BOTAO_PADRAO,
+        hover_color=COR_BOTAO_HOVER,
+        text_color=COR_TEXTO_PADRAO,
+        image=icone,
+        compound="left",
+        anchor="w",
+        border_spacing=14
+    )
 
-    botao =  ctk.CTkButton(quadro_lateral,text="CADASTRAR CONTEÚDO",
-                                   font=("roboto",14),
-                                   width=300,
-                                   height=55,
-                                   corner_radius=8,
-                                   fg_color="#1E293B",
-                                   hover_color="#334155",
-                                   image=icone_btn_cadastrar,
-                                   compound="left",anchor="w", border_spacing=15,
-                  command=lambda:(cadastrarConteudo(quadro_central, quadro_principal, usuario), selecionar_btn(botao)))
-    botao.pack(pady=5,padx=15)
+    if comando:
+        botao.configure(command=lambda: (comando(), selecionar_btn(botao)))
+    else:
+        botao.configure(command=lambda: selecionar_btn(botao))
 
-def criar_btn_visualizar(quadro_lateral, quadro_central, quadro_principal,visualizarConteudo,usuario):
+    botao.pack(fill="x", padx=15, pady=4)
+    return botao
 
-    icone_btn_visualizar = ctk.CTkImage(light_image=Image.open("imagens/iconeVerRelatorio.png"),
-                                        dark_image=Image.open("imagens/iconeVerRelatorio.png"),
-                                        size=(60, 60))
+# BOTOES E ICONES
+def criar_btn_cadastro(quadro_lateral, quadro_central, disciplina, cadastrarConteudo, usuario):
+    return _criar_item_menu_padrao(
+        quadro_lateral=quadro_lateral,
+        texto="CADASTRAR CONTEÚDO",
+        icone_path="imagens/iconeCadastrar.png",
+        comando=lambda: cadastrarConteudo(quadro_central, disciplina, usuario)
+    )
 
-    botao = ctk.CTkButton(quadro_lateral,
-                  text="VISUALIZAR RELATÓRIO",
-                  font=("roboto", 14), width=300,
-                  height=55, corner_radius=8,
-                  fg_color="#1E293B",
-                  hover_color="#334155",
-                  image=icone_btn_visualizar,
-                  compound="left", anchor="w", border_spacing=15,
-                          command=lambda:(visualizarConteudo(quadro_central, quadro_principal, usuario), selecionar_btn(botao)))
+def criar_btn_visualizar(quadro_lateral, quadro_central, quadro_principal, visualizarConteudo, usuario,disciplina):
+    return _criar_item_menu_padrao(
+        quadro_lateral=quadro_lateral,
+        texto="VISUALIZAR RELATÓRIO",
+        icone_path="imagens/iconeVerRelatorio.png",
+        comando=lambda: visualizarConteudo(quadro_central, quadro_principal, usuario,disciplina)
+    )
 
-    botao.pack(pady=5,padx=15)
+def criar_btn_cadastrarProfessor(quadro_lateral, quadro_central, quadro_principal, gerarRelatorio):
+    return _criar_item_menu_padrao(
+        quadro_lateral=quadro_lateral,
+        texto="CADASTRAR PROFESSOR",
+        icone_path="imagens/iconeCadastraProfessor.png",
+        comando=lambda: acionar_cadastro()
+    )
 
-def criar_btn_cadastrarProfessor(quadro_lateral, quadro_central,quadro_principal, gerarRelatorio):
-    icone_btn_gerar = ctk.CTkImage(light_image=Image.open("imagens/iconeProfessor.png"),
-                                   dark_image=Image.open("imagens/iconeProfessor.png"),
-                                   size=(70, 70))
+def criar_btn_visualizarProfessores(quadro_lateral, quadro_central, quadro_principal, usuario=None):
+    return _criar_item_menu_padrao(
+        quadro_lateral=quadro_lateral,
+        texto="VISUALIZAR PROFESSORES\nCADASTRADOS",
+        icone_path="imagens/iconeVisualizarProfessores.png",
+        font_size=11,
+        comando=lambda : visualizarProfessores(quadro_central,quadro_principal)
+    )
 
-    botao = ctk.CTkButton(quadro_lateral, text="CADASTRAR PROFESSOR",
-                  font=("roboto", 14),
-                  width=300, height=55,
-                  corner_radius=8,
-                  fg_color="#1E293B",
-                  hover_color="#334155",
-                  image=icone_btn_gerar,
-                  compound="left", anchor="w", border_spacing=15,
-                          command=lambda:(acionar_cadastro(), selecionar_btn(botao)))
-    botao.pack(pady=5,padx=15)
-
-def criar_btn_inserirAss(quadro_lateral, quadro_central,quadro_principal, inserirAss,usuario):
-    icone_btn_inserirAss = ctk.CTkImage(light_image=Image.open("imagens/iconeInserirAss.png"),
-                                        dark_image=Image.open("imagens/iconeInserirAss.png"),
-                                        size=(60, 60))
-
-    botao = ctk.CTkButton(quadro_lateral,text="INSERIR ASSINATURA",
-                                font=("roboto",14),
-                                width=300, height=55,
-                                corner_radius=8,
-                                fg_color="#1E293B",
-                                hover_color="#334155",
-                                image=icone_btn_inserirAss,
-                                compound="left", anchor="w", border_spacing=15,
-                                     command=lambda:(selecionar_btn(botao),escolher_e_salvar_assinatura(usuario)))
-    botao.pack(pady=(3,15),padx=15)
+def criar_btn_inserirAss(quadro_lateral, quadro_central, quadro_principal, inserirAss, usuario):
+    return _criar_item_menu_padrao(
+        quadro_lateral=quadro_lateral,
+        texto="INSERIR ASSINATURA",
+        icone_path="imagens/iconeInserirAss.png",
+        comando=lambda: escolher_e_salvar_assinatura(usuario)
+    )
 
 def criar_btnPersonalizado(
     master,

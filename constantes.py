@@ -1,2 +1,3 @@
-MODELO_PCM = "Relatorio PCM"
-MODELO_JUVENTUDE = "Relatorio Juventude"
+MODELO_PCM = "PCM"
+MODELO_JUVENTUDE = "Juventude"
+MODELO_SAO_VICENTE = "São Vicente"

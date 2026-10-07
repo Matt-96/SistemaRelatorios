@@ -1,8 +1,9 @@
 import shutil
+from pydoc import text
 
 import customtkinter as ctk
 from tkinter import messagebox, filedialog
-from database import cadastrarProfessor, atualizar_caminho_pasta
+from database import cadastrarProfessor, atualizar_caminho_pasta, cadastrar_disciplina
 
 from funcoes_docx import funcoes_cadastro
 
@@ -51,3 +52,25 @@ def adiciona_template(usuario, caminho_pasta):
         messagebox.showerror("Erro", f"Falha ao copiar os arquivos: {Erro}")
         return False
 
+
+def janelaDeCadastroDisciplina(id_usuario, professor):
+    try:
+        dialogoDisciplina = ctk.CTkInputDialog(title="Cadastro de disciplina", text="Informe a disciplina a ser cadastrada para"
+        
+                                                                      f" o Professor(a) {professor}: ")
+
+        nomeDisciplina = dialogoDisciplina.get_input()
+
+        if not nomeDisciplina:
+            return
+
+
+        cadastro = cadastrar_disciplina(id_usuario, nomeDisciplina)
+        if cadastro:
+            funcoes_cadastro.criar_pasta_disciplina(professor,nomeDisciplina)
+            messagebox.showinfo(title="Sucesso", message=f"Sucesso! A disciplina {nomeDisciplina} foi cadastrada com sucesso")
+        else:
+             messagebox.showwarning(title="Erro", message="Erro no cadastro.Disciplina já existe.")
+
+    except Exception as Erro:
+        messagebox.showerror(title="Erro", message=f"Erro: {Erro}")

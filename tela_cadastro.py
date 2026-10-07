@@ -6,12 +6,20 @@ from componentes.conteinersTelaCadastro import criar_hearderImg, linhaDivisoria,
     criar_frameInformacoes, criar_frameModelo, criar_frameTxtBox, criar_frameTurmas
 from componentes.objetosConteiner import criar_quadroCentral, criar_quadroPrincipal, limpar_tela
 from componentes.conteinersTelaCadastro import criarHeader
-from funcoes_docx.funcoes_cadastro import escreverConteudo, escolheTurma, carregarTemplate
+from database import buscar_id_usuario, buscar_id_disciplina, listar_modelos
+from funcoes_docx.funcoes_cadastro import escreverConteudo, escolheTurma, carregarTemplate, mostraTurmasPCM
+from constantes import MODELO_PCM
 
-
-def cadastrarConteudo(quadro_central, quadro_principal, usuario):
+def cadastrarConteudo(quadro_central, disciplina, usuario):
 
     limpar_tela(quadro_central)
+
+    nome_disciplina = disciplina.get()
+
+    #PEGA DADOS DO BANCO DE DADOS
+    id_usuario = buscar_id_usuario(usuario)
+    id_disciplina = buscar_id_disciplina(id_usuario,nome_disciplina)
+    modelos = listar_modelos(id_disciplina)
 
     #HEADER
     quadroHeader = criarHeader(quadro_central)
@@ -38,11 +46,19 @@ def cadastrarConteudo(quadro_central, quadro_principal, usuario):
 
     # AREA DE SELEÇÃO TURMAS PCM
 
-    frameTurmas, menuOpcoes = criar_frameTurmas(frameModelo)
+    frameTurmas, menuOpcoes = criar_frameTurmas(frameModelo, usuario,nome_disciplina, MODELO_PCM)
 
     #BOTOES DE RADIO
-    criar_btnRadio2(frameModelo, modelo_var, usuario, frameTurmas)
-    criar_btnRadio1(frameModelo, modelo_var, usuario,frameTurmas)
+    if not modelos:
+        ctk.CTkLabel(frameModelo, text="Nenhum projeto cadastrado", font=("Roboto", 16),
+                     text_color="#94A3B8").grid(row=1, column=0, sticky="nw", padx=(20, 0))
+    else:
+        cont = 0
+        for modelo in modelos:
+            menuTurmas = ctk.CTkRadioButton(frameModelo,text=modelo ,font=("Roboto",18),value=modelo,variable=modelo_var,
+            command=lambda:mostraTurmasPCM(usuario,modelo_var,frameTurmas)).grid(row=cont+1, column=0,sticky="nw",pady=(0,10), padx=(20,0)                   )
+
+            cont += 1
 
 
 
@@ -53,10 +69,11 @@ def cadastrarConteudo(quadro_central, quadro_principal, usuario):
     img = ctk.CTkImage(light_image=Image.open("imagens/cadastroBranco.png"),dark_image=Image.open("imagens/cadastroBranco.png"), size=(40,30))
     botaoCadastrar =  criar_btnPersonalizado(txtBox, text="Cadastrar", font=("Roboto",25), fg_color="#4124CC",
                                              height=55, corner_radius=12, border_color="white",
-                                             border_width=1, image=img, command=lambda :(carregarTemplate(usuario,modelo_var,data_var.get()),escreverConteudo(usuario,
+                                             border_width=1, image=img, command=lambda :(carregarTemplate(usuario,modelo_var,data_var.get(),nome_disciplina),escreverConteudo(usuario,
                                                                                                           modelo_var,
                                                                                                           caixaDeTexto,
                                                                                                           data_var.get(),
-                                                                                                          menuOpcoes)))
+                                                                                                          menuOpcoes,
+                                                                                                          nome_disciplina)))
     botaoCadastrar.pack(side="bottom",fill="both",padx=20)
 

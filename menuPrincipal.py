@@ -3,7 +3,8 @@ from PIL import Image
 from componentes.botoes import *
 from componentes.objetosConteiner import cabecalho, frame_lateral, criar_quadroPrincipal, criar_quadroCentral, \
     criar_sessaoBoasvindas, criar_quadroUsuario, criar_labelUsuario, criar_labelTitulolUsuario, criar_imagemUsuario, \
-    criar_btnLogOut, criar_frameMenu
+    criar_btnLogOut, criar_frameMenu, criar_menuDisciplinas
+from database import buscar_id_usuario, listar_disciplinas, listar_modelos
 from tela_cadastro import cadastrarConteudo
 from tela_gerarRelatorio import gerarRelatorio
 from tela_visualizacao import visualizarConteudo
@@ -14,6 +15,17 @@ def menu_principal(janela,usuario, login):
     #CRIA A JANELA QUE IRÁ A ABRIGAR OS ELEMENTOS
     janela.geometry("1920x1080")
     janela.title("Gerador de Relatórios")
+
+    #INTEGRAÇÃO COM O BANCO DE DADOS
+    id_usuario = buscar_id_usuario(usuario)
+    disciplinas_cadastradas = listar_disciplinas(id_usuario)
+
+    disciplina_var = ctk.StringVar()
+
+    if disciplinas_cadastradas:
+        disciplina_var.set(disciplinas_cadastradas[0])
+    else:
+        disciplina_var.set("Selecione a disciplina")
 
 
 
@@ -30,6 +42,7 @@ def menu_principal(janela,usuario, login):
 
     # SESSÃO DO USUÁRIO
     quadro_usuario = criar_quadroUsuario(quadro_lateral)  # CRIA A SESSAO QUADRO USUARIO
+    criar_menuDisciplinas(quadro_usuario,disciplinas_cadastradas, disciplina_var)
     criar_labelTitulolUsuario(quadro_usuario)  # CRIA O TITULO USUARIO
     criar_labelUsuario(quadro_usuario, usuario)  # INSERE O USUARIO QUE ESTÁ LOGADO NA TELA
     criar_imagemUsuario(quadro_usuario)  # MOSTRA A IMAGEM DO USUARIO
@@ -41,11 +54,12 @@ def menu_principal(janela,usuario, login):
 
 
     # BOTÕES
-    criar_btn_cadastro(frame_Menu, quadro_central, quadro_principal, cadastrarConteudo,usuario)
+    criar_btn_cadastro(frame_Menu, quadro_central, disciplina_var, cadastrarConteudo,usuario)
 
-    criar_btn_visualizar(frame_Menu, quadro_central,quadro_principal,visualizarConteudo, usuario)
+    criar_btn_visualizar(frame_Menu, quadro_central,quadro_principal,visualizarConteudo, usuario,disciplina_var)
 
     criar_btn_cadastrarProfessor(frame_Menu, quadro_central, quadro_principal, gerarRelatorio)
+    criar_btn_visualizarProfessores(frame_Menu,quadro_central,quadro_principal,usuario)
 
     criar_btn_inserirAss(frame_Menu, quadro_central, quadro_principal,inserirAss,usuario)
 

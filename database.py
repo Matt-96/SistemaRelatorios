@@ -1,5 +1,7 @@
 import sqlite3
 import hashlib
+from unittest import result
+
 from config import BASE_DIR
 
 
@@ -75,6 +77,30 @@ def cadastrarProfessor(usuario, senha, caminho_pasta=None):
     finally:
         conexao.close()#EVITA QUE A CONEXÃO FIQUE ABERTA
 
+
+def listar_professores():
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+            SELECT usuario FROM usuarios
+        
+        """)
+
+
+        resultado = cursor.fetchall()
+        professores = [professores[0] for professores in resultado]
+
+        return professores
+
+    except Exception as Erro:
+        print(f"Erro: {Erro}")
+        return []
+    finally:
+        conexao.close()
+        
+
 def cadastrar_disciplina(usuario_id, nome):
     try:
         conexao = conectar_banco()
@@ -115,6 +141,28 @@ def buscar_id_usuario(usuario):
         print(f"Erro: {Erro}")
         return None
 
+    finally:
+        conexao.close()
+
+def buscar_id_disciplina(usuario_id, nome):
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+        
+            SELECT id FROM disciplinas
+            WHERE usuario_id = ? AND nome = ?
+        """,(usuario_id,nome))
+
+        resultado = cursor.fetchone()
+        if resultado != None:
+            return resultado[0]
+        else:
+            return None
+    except Exception as Erro:
+        print(f"Erro: {Erro}" )
+        return None
     finally:
         conexao.close()
 
@@ -186,6 +234,52 @@ def buscar_configuracao_modelo(disciplina_id, tipo_modelo):
     except Exception as Erro:
         print(f"Erro: {Erro}")
         return None
+    finally:
+        conexao.close()
+
+
+def listar_modelos(disciplina_id):
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+            SELECT tipo_modelo FROM configuracoes_modelo
+            WHERE disciplina_id = ?
+        
+        """, [disciplina_id])
+
+        resultado = cursor.fetchall()
+        modelos = [modelos[0] for modelos in resultado]
+        return modelos
+
+    except Exception as Erro:
+        print(f"Erro: {Erro}")
+        return []
+    finally:
+        conexao.close()
+
+def listar_projetos_professor(id_usuario):
+    try:
+        conexao = conectar_banco()
+        cursor = conexao.cursor()
+
+        cursor.execute("""
+            SELECT DISTINCT CM.tipo_modelo
+            FROM configuracoes_modelo CM
+            JOIN disciplinas D on CM.disciplina_id = D.id
+            WHERE D.usuario_id = ?
+                
+        """,[id_usuario])
+
+        resultado = cursor.fetchall()
+        projetos = [projetos[0] for projetos in resultado]
+
+        return projetos
+
+    except Exception as Erro:
+        print(f"Erro: {Erro}")
+        return []
     finally:
         conexao.close()
 

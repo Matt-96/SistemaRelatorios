@@ -8,6 +8,8 @@ import os
 from docx.shared import Inches
 import shutil
 
+from caminhos import obter_caminho_template
+from config import BASE_DIR
 from database import cadastrarProfessor, atualizar_caminho_pasta
 
 
@@ -46,55 +48,50 @@ def selecionarData(switch,dicionario):
 
 # Carregando o arquivo de template de acordo com o nome do usuario e template selecionado na tela de cadastro
 def mostraTurmasPCM(usuario, modelo_var, frameTurmas):
-    if usuario == "Matheus":
 
-        if modelo_var.get() == "Juventude":
-            frameTurmas.grid_remove()
-        elif modelo_var.get() == "PCM":
-            frameTurmas.grid(row=4,padx=(20, 0))
-
+    if modelo_var.get() == "PCM":
+        frameTurmas.grid(row=4,padx=(20, 0))
+    else:
+        frameTurmas.grid_remove()
 
 
 
 
-def carregarTemplate(usuario, modelo_var,data):
+def carregarTemplate(usuario, modelo_var,data, disciplina):
     #Define a pasta de destino do professor
     pasta_raiz = os.path.dirname(os.path.dirname(__file__))  # Ajusta a pasta raiz
     pasta_professor = os.path.join(pasta_raiz, "Professores", usuario)
 
-    if usuario == "Matheus":
 
-        if modelo_var.get() == "Juventude":
-            dataFormatada = data.replace("/", "-")
-            caminhoBackup = os.path.join(pasta_professor,"backupJuventude",f"RelatorioJuventudeVioloncelo{dataFormatada}.docx")
-            caminhoMatriz = os.path.join(pasta_professor,"Relatorio Juventude.docx")
-            if os.path.exists(caminhoBackup):
-                doc = docx.Document(caminhoBackup)
-                nomeArquivo = f"RelatorioJuventudeVioloncelo{dataFormatada}"
-            else:
-                doc = docx.Document(caminhoMatriz)
-                doc.save(caminhoBackup)
-                nomeArquivo = f"RelatorioJuventudeVioloncelo{dataFormatada}"
+    #PEGA O NOME DO MODELO
+    modelo = modelo_var.get()
+    dataFormatada = data.replace("/", "-")
+    #PEGA OS TEMPLATES
+    caminhoMatriz = obter_caminho_template(usuario, disciplina, modelo)
 
-        elif modelo_var.get() == "PCM":
-            dataFormatada = data.replace("/", "-")
-            caminhoBackup = os.path.join(pasta_professor,"backupPCM",f"RelatorioPCMVioloncelo{dataFormatada}.docx")
-            caminhoMatriz = os.path.join(pasta_professor, "Relatorio PCM.docx")
-            print("CAMINHO BACKUP:", caminhoBackup)
-            if os.path.exists(caminhoBackup):
-                doc = docx.Document(caminhoBackup)
-                nomeArquivo = rf"RelatorioPCMVioloncelo{dataFormatada}"
-            else:
-                doc = docx.Document(caminhoMatriz)
-                doc.save(caminhoBackup)
-                nomeArquivo = f"RelatorioPCMVioloncelo{dataFormatada}"
+    pasta_backup = os.path.join(pasta_professor, disciplina, f"backup{modelo}")
+    os.makedirs(pasta_backup, exist_ok=True)
+
+    # ACESSA OS ARQUIVOS PREENCHIDOS
+    caminhoBackup = os.path.join(pasta_backup,f"Relatorio{modelo}{disciplina}{dataFormatada}.docx")
+
+    if os.path.exists(caminhoBackup):
+        doc = docx.Document(caminhoBackup)
+        nomeArquivo = f"Relatorio {modelo}{disciplina}{dataFormatada}"
+    else:
+        doc = docx.Document(caminhoMatriz)
+        doc.save(caminhoBackup)
+        nomeArquivo = f"Relatorio{modelo} {disciplina}{dataFormatada}"
+
+        print("CAMINHO BACKUP:", caminhoBackup)
+
     return doc, nomeArquivo, caminhoBackup
 
 
 
 
-def escreverConteudo(usuario, modelo_var, caixaDeTexto,  data_var, turmas):
-    doc, nomeArquivo, caminhoBackup = carregarTemplate(usuario, modelo_var, data_var)
+def escreverConteudo(usuario, modelo_var, caixaDeTexto,  data_var, turmas, disciplina):
+    doc, nomeArquivo, caminhoBackup = carregarTemplate(usuario, modelo_var, data_var, disciplina)
 
     conteudo = caixaDeTexto.get("1.0", "end")  # CAPTURA O TEXTO
 
@@ -108,7 +105,8 @@ def escreverConteudo(usuario, modelo_var, caixaDeTexto,  data_var, turmas):
     inserirAssinatura(doc, caminho_assinatura, usuario)
     data = data_var
     data_formatada = data.replace('/', '-')
-    if nomeArquivo == f"RelatorioJuventudeVioloncelo{data_formatada}":
+
+    if modelo_var.get() == "Juventude":
         escreverJuventude(doc,conteudo)
 
         doc.save(caminhoBackup)
@@ -243,5 +241,10 @@ def criar_pasta_professor(usuario):
 
     return pasta_professor
 
-def criar_pasta_disciplina(disciplina):
-    pass
+def criar_pasta_disciplina(usuario,disciplina):
+    pasta_raiz = BASE_DIR
+    pasta_professor = os.path.join(pasta_raiz, "Professores", usuario)
+    pasta_disciplina = os.path.join(pasta_professor,disciplina)
+
+    os.makedirs(pasta_disciplina, exist_ok=True)
+

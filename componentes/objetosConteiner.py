@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
 
-from componentes.botoes import criar_btnPersonalizado
 
 
 #NESSE ARQUIVO ESTÃO OS ELEMENTOS DO MENU PRINCIPAL
@@ -104,39 +103,112 @@ def cabecalho(quadro_lateral):
 
 #SESSÃO DO USUÁRIO
 def criar_quadroUsuario(quadro_lateral):
-    quadro_usuario = ctk.CTkFrame(quadro_lateral, width=260, height=75, fg_color="#1E293B", corner_radius=8)
-    quadro_usuario.pack(fill="x", padx=10, pady=(0,15), side="bottom")
+    quadro_usuario = ctk.CTkFrame(
+        quadro_lateral,
+        height=148,
+        fg_color="#162032",
+        corner_radius=12,
+        border_width=1,
+        border_color="#334155"
+    )
+    quadro_usuario.pack(fill="x", padx=15, pady=(0, 15), side="bottom")
+    quadro_usuario.pack_propagate(False)
 
     return quadro_usuario
 
-def criar_labelTitulolUsuario(quadro_usuario):
-    labelTituloUsuario = ctk.CTkLabel(quadro_usuario, text="Usuário", font=("Roboto", 20),anchor="w")
-    labelTituloUsuario.place(x=82,y=7)
 
+def criar_menuDisciplinas(quadroUsuario, disciplinas, disciplina_var):
+    # Rótulo de contexto para dar acabamento profissional
+    label_contexto = ctk.CTkLabel(
+        quadroUsuario,
+        text="DISCIPLINA ATIVA",
+        font=("Roboto", 10, "bold"),
+        text_color="#64748B",
+        anchor="w"
+    )
+    label_contexto.place(x=16, y=68)
+
+    menu = ctk.CTkComboBox(
+        quadroUsuario,
+        fg_color="#0B1322",
+        button_color="#1E293B",
+        button_hover_color="#2D3E5F",
+        dropdown_fg_color="#0F172A",
+        dropdown_hover_color="#1E293B",
+        dropdown_text_color="#F8FAFC",
+        font=("Roboto", 12, "bold"),
+        dropdown_font=("Roboto", 12),
+        corner_radius=8,
+        width=200,
+        height=36,
+        variable=disciplina_var,
+        values=disciplinas if disciplinas else ["Nenhuma disciplina"],
+        state="readonly",
+        border_width=1,
+        border_color="white"
+    )
+    menu.place(x=16, y=94)
+    return menu
+
+
+def criar_labelTitulolUsuario(quadro_usuario):
+    labelTituloUsuario = ctk.CTkLabel(
+        quadro_usuario,
+        text="PROFESSOR",
+        font=("Roboto", 10, "bold"),
+        text_color="#64748B",
+        anchor="w"
+    )
+    labelTituloUsuario.place(x=70, y=14)
 
 
 def criar_labelUsuario(quadro_usuario, usuario):
-    labelUsuario = ctk.CTkLabel(quadro_usuario,text=usuario,font=("Roboto", 15), anchor="w",text_color="#94A3B8" )
-    labelUsuario.place(x=84, y=30)
+    labelUsuario = ctk.CTkLabel(
+        quadro_usuario,
+        text=usuario,
+        font=("Roboto", 16, "bold"),
+        text_color="#F8FAFC",
+        anchor="w"
+    )
+    labelUsuario.place(x=70, y=30)
+
 
 def criar_imagemUsuario(quadro_usuario):
-    img_usuario = ctk.CTkImage(light_image=Image.open("imagens/imagemUsuariopng.png"), dark_image=Image.open(
-        "imagens/imagemUsuariopng.png"), size=(50, 50))
+    img_usuario = ctk.CTkImage(
+        light_image=Image.open("imagens/imagemUsuariopng.png"),
+        dark_image=Image.open("imagens/imagemUsuariopng.png"),
+        size=(44, 44)
+    )
     img_usuarioLabel = ctk.CTkLabel(quadro_usuario, image=img_usuario, text="")
+    img_usuarioLabel.place(x=15, y=13)
 
-    img_usuarioLabel.place(x=20,y=7)
 
-def logOut(quadro_principal, quadro_lateral,login, janela):
+def logOut(quadro_principal, quadro_lateral, login, janela):
     quadro_principal.destroy()
     quadro_lateral.destroy()
     login(janela)
 
 
-def criar_btnLogOut(quadro_usuario, quadro_principal,quadro_lateral, login, janela):
-    logOutimg = ctk.CTkImage(light_image=Image.open("imagens/botaoLogOut.png"),
-                                 dark_image=Image.open("imagens/botaoLogOut.png"), size=(40,40))
-    btnLogOut = criar_btnPersonalizado(quadro_usuario,fg_color="transparent", image=logOutimg,text="", command=lambda: logOut(quadro_principal,quadro_lateral, login, janela))
-    btnLogOut.place(x=210,y=7)
+def criar_btnLogOut(quadro_usuario, quadro_principal, quadro_lateral, login, janela):
+    logOutimg = ctk.CTkImage(
+        light_image=Image.open("imagens/botaoLogOut.png"),
+        dark_image=Image.open("imagens/botaoLogOut.png"),
+        size=(34, 34)
+    )
+    btnLogOut = ctk.CTkButton(
+        quadro_usuario,
+        width=36,
+        height=36,
+        fg_color="#1E293B",
+        hover_color="#334155",
+        border_width=1,
+        border_color="#334155",
+        corner_radius=8,
+        image=logOutimg,
+        text="",
+        command=lambda: logOut(quadro_principal, quadro_lateral, login, janela)
+    )
+    btnLogOut.place(x=246, y=14)
 
 
 def limpar_tela(frame):

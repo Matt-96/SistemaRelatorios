@@ -1,27 +1,10 @@
 import os
 from constantes import MODELO_PCM, MODELO_JUVENTUDE
 
-def buscarRelatorios(usuario):#Pega o nome dos relatórios presentes na pasta do professor
 
-    pasta_professor = os.path.join("Professores", usuario)
-
-    arquivos = os.listdir(pasta_professor)
-
-    templates = []
-
-    for arquivo in arquivos:
-        if "Relatorio PCM.docx" in arquivo or "Relatorio Juventude.docx" in arquivo:
-            txt = os.path.splitext(arquivo)[0]
-            templates.append(txt)
-
-
-
-    return templates
-
-
-def buscarDatas(usuario, modelo):
-    pastaJuventude = os.path.join("Professores",usuario, "backupJuventude")
-    pastaPCM = os.path.join("Professores",usuario, "backupPCM")
+def buscarDatas(usuario, modelo,disciplina):
+    pastaJuventude = os.path.join("Professores",usuario,disciplina, "backupJuventude")
+    pastaPCM = os.path.join("Professores",usuario, disciplina,"backupPCM")
 
     if modelo == MODELO_PCM:
         arquivos = os.listdir(pastaPCM)

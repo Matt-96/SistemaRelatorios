@@ -2,8 +2,10 @@ from pydoc import text
 
 import customtkinter as ctk
 from PIL import Image
-from PIL.ImageOps import expand
-from customtkinter import CTkTextbox
+
+from constantes import MODELO_PCM
+from caminhos import obter_caminho_template
+
 from funcoes_docx.funcoes_cadastro import carregarTemplate, extrair_turmasPCM, escolheTurma, mostraTurmasPCM
 from datetime import date
 import docx
@@ -85,11 +87,11 @@ def labelConteudo(txtBox):
     ctk.CTkLabel(txtBox, text="Conteúdo", font=("Roboto", 23)).pack(side="top", anchor="nw", padx=20, pady=(15, 15))  # SUB-TITULO
 
 #AREA PARA AS TURMAS PCM
-def criar_frameTurmas(frameModelo):
+def criar_frameTurmas(frameModelo,usuario,disciplina, MODELO_PCM):
     frameTurmas = ctk.CTkFrame(frameModelo, fg_color="transparent")
     frameTurmas.grid(row=4, padx=(20,0))
 
-    doc = docx.Document(r"E:\Projetos\SistemaRelatorios\Professores\Matheus\Relatorio PCM.docx")
+    doc = docx.Document(obter_caminho_template(usuario, disciplina, MODELO_PCM))
     turmas = extrair_turmasPCM(doc)
     txtTurma = ctk.CTkLabel(frameTurmas, text="Turma", font=("Roboto",20))
     txtTurma.grid(sticky="w", padx=(30,0), pady=(0,10))
