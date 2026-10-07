@@ -20,3 +20,14 @@ dist/
 # Arquivos do Sistema Operacional
 .DS_Store
 Thumbs.db
+
+# Dados Pessoais Sensíveis e Assinaturas
+**/assinatura.png
+assinatura.png
+
+# Credenciais e Tokens do Google Drive
+credentials.json
+token.json
+
+# Backups gerados
+**/backup*/
