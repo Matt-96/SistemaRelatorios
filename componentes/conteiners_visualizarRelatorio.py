@@ -50,21 +50,21 @@ def criar_TxtHeader(quaadroHeader):
         text="Visualize os conteúdos cadastrados no relatório.",
         font=("Roboto", 20),
         text_color="#94A3B8"
-    ).pack(anchor="w", padx=(45, 0))
+    ).pack(anchor="w")
 
 
-def linhaDivisoria(quadro_principal):
+def linhaDivisoria(quadro_central):
     linhaImg = ctk.CTkImage(
         light_image=Image.open("imagens/linhaCentralGrande.png"),
         dark_image=Image.open("imagens/linhaCentralGrande.png"),
         size=(1450, 80)
     )
-    ctk.CTkLabel(quadro_principal, text="", image=linhaImg).pack(fill="x", padx=20)
+    ctk.CTkLabel(quadro_central, text="", image=linhaImg).pack(fill="x", padx=20)
 
 
 def criar_frameTextos(quadroHeader):
     frameTexto = ctk.CTkFrame(quadroHeader, fg_color="transparent")
-    frameTexto.pack(side="left")
+    frameTexto.pack(side="left", padx=(25, 0))
 
     criarLabelTitulo(frameTexto)
     criar_TxtHeader(frameTexto)
@@ -97,6 +97,8 @@ def criar_filtros(quadro_central, usuario, organizaTabela, frameTabela, discipli
             disciplina
         )
     )
+
+    return menuModelo, menuData
 
 
 def labelModeloRelatorio(frameModelo):

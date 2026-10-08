@@ -31,3 +31,5 @@ token.json
 
 # Backups gerados
 **/backup*/
+# Guias e arquivos PDF locais
+*.pdf

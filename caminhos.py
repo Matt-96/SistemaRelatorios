@@ -9,3 +9,17 @@ def obter_caminho_template(usuario,disciplina,modelo):
         return caminhoTemplate
     else:
         return  None
+
+
+def obter_caminho_arquivo(usuario,disciplina,modelo,data):
+    dataFormatada = data.replace("/", "-")
+
+    nomeArquivo = f"Relatorio{modelo}{disciplina}{dataFormatada}.docx"
+    caminhoArquivo = BASE_DIR / "Professores" / usuario / disciplina /f"backup{modelo}"/ nomeArquivo
+
+
+
+    if caminhoArquivo.exists():
+        return caminhoArquivo
+    else:
+        return  None

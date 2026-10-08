@@ -141,7 +141,8 @@ def criar_btnVisibilidadeSenha(frameSenha, campo_senha):
         border_width=0,
         image=iconeOlho,
         fg_color="transparent",
-        command=lambda: alternar_senha(campo_senha)
+        hover=False,
+        command=lambda: alternar_senha(campo_senha),
     )
 
     botaoOlho.pack(side="right", padx=(0, 5))

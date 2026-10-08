@@ -32,19 +32,21 @@ def criar_header_professores(quadro_central):
 
     # Frame de Textos
     frame_texto = ctk.CTkFrame(quadro_header, fg_color="transparent")
-    frame_texto.pack(side="left")
+    frame_texto.pack(side="left", padx=(25, 0))
 
     ctk.CTkLabel(
         frame_texto,
         text="Professores",
-        font=("Roboto", 45)
-    ).pack()
+        font=("Roboto", 45),
+        text_color="#F8FAFC"
+    ).pack(anchor="w")
 
     ctk.CTkLabel(
         frame_texto,
         text="Gerencie os professores cadastrados no sistema.",
-        font=("Roboto", 20)
-    ).pack(padx=(45, 0))
+        font=("Roboto", 20),
+        text_color="#94A3B8"
+    ).pack(anchor="w")
 
     return quadro_header
 
@@ -182,6 +184,10 @@ def visualizarProfessores(quadro_central, quadro_principal):
         frame_acao = ctk.CTkFrame(card, fg_color="transparent")
         frame_acao.pack(side="right", padx=(0, 24), pady=16)
 
+        def ao_cadastrar_disciplina(id_user, prof):
+            if janelaDeCadastroDisciplina(id_user, prof):
+                visualizarProfessores(quadro_central, quadro_principal)
+
         btn_cadastrar = ctk.CTkButton(
             frame_acao,
             text="+ Cadastrar Disciplina",
@@ -191,7 +197,7 @@ def visualizarProfessores(quadro_central, quadro_principal):
             fg_color="#2563EB",
             hover_color="#1D4ED8",
             text_color="#FFFFFF",
-            command=lambda   id_usuario = id_usuario, professor = professor:janelaDeCadastroDisciplina(id_usuario,professor)
+            command=lambda id_u=id_usuario, prof=professor: ao_cadastrar_disciplina(id_u, prof)
         )
         btn_cadastrar.pack(side="right")
 

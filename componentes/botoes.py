@@ -62,11 +62,15 @@ def criar_btn_visualizar(quadro_lateral, quadro_central, quadro_principal, visua
     )
 
 def criar_btn_cadastrarProfessor(quadro_lateral, quadro_central, quadro_principal, gerarRelatorio):
+    def ao_cadastrar():
+        if acionar_cadastro():
+            visualizarProfessores(quadro_central, quadro_principal)
+
     return _criar_item_menu_padrao(
         quadro_lateral=quadro_lateral,
         texto="CADASTRAR PROFESSOR",
         icone_path="imagens/iconeCadastraProfessor.png",
-        comando=lambda: acionar_cadastro()
+        comando=ao_cadastrar
     )
 
 def criar_btn_visualizarProfessores(quadro_lateral, quadro_central, quadro_principal, usuario=None):

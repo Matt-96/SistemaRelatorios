@@ -14,11 +14,11 @@ def acionar_cadastro():
     usuario = dialogo_usuario.get_input()
 
     if not usuario: #Se o usuário não preencher nada ou clicar em cancelar
-        return
+        return False
     dialogo_senha = ctk.CTkInputDialog(title="Cadastro", text="Digite a senha do Professor:")
     senha = dialogo_senha.get_input()
     if not senha:
-        return
+        return False
     #Manda para a função de Cadastro
     sucesso = cadastrarProfessor(usuario, senha)
 
@@ -28,9 +28,10 @@ def acionar_cadastro():
         messagebox.showinfo("Confirmação de cadastro", "Usuário Cadastrado com sucesso!")
         caminho_pasta = funcoes_cadastro.criar_pasta_professor(usuario)
         adiciona_template(usuario,caminho_pasta)
-
+        return True
     else:
         messagebox.showwarning("Erro no cadastro", "Usuário já cadastrado")
+        return False
 
 def adiciona_template(usuario, caminho_pasta):
     #PEDE OS ARQUIVOS DE TEMPLATE
@@ -62,15 +63,18 @@ def janelaDeCadastroDisciplina(id_usuario, professor):
         nomeDisciplina = dialogoDisciplina.get_input()
 
         if not nomeDisciplina:
-            return
+            return False
 
 
         cadastro = cadastrar_disciplina(id_usuario, nomeDisciplina)
         if cadastro:
             funcoes_cadastro.criar_pasta_disciplina(professor,nomeDisciplina)
             messagebox.showinfo(title="Sucesso", message=f"Sucesso! A disciplina {nomeDisciplina} foi cadastrada com sucesso")
+            return True
         else:
-             messagebox.showwarning(title="Erro", message="Erro no cadastro.Disciplina já existe.")
+            messagebox.showwarning(title="Erro", message="Erro no cadastro.Disciplina já existe.")
+            return False
 
     except Exception as Erro:
         messagebox.showerror(title="Erro", message=f"Erro: {Erro}")
+        return False
