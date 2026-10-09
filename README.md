@@ -6,25 +6,24 @@
 [![Google Drive API](https://img.shields.io/badge/Cloud-Google%20Drive%20API%20v3-4285F4?logo=googledrive&logoColor=white)](https://developers.google.com/drive)
 [![python-docx](https://img.shields.io/badge/Docx%20Engine-python--docx-2B579A?logo=microsoftword&logoColor=white)](https://python-docx.readthedocs.io/)
 
-Aplicação desktop corporativa de alta performance desenvolvida em **Python** para automatizar o ciclo completo de planejamento de aulas, geração de relatórios pedagógicos em arquivos Microsoft Word (`.docx`) com formatação institucional e upload automatizado para pastas compartilhadas do **Google Drive**.
+Aplicação desktop desenvolvida em **Python** para registrar os conteúdos trabalhados durante as aulas, preencher automaticamente relatórios pedagógicos em arquivos Microsoft Word (`.docx`) e organizar os arquivos em pastas locais, enviando-os posteriormente para o **Google Drive** de forma organizada e automatizada.
 
 ---
 
 ## 🎯 Contexto e Problema de Negócio
 
 Em instituições de ensino e projetos sociais que atendem múltiplos polos e programas pedagógicos (como *Projeto Crescendo com Música*, *Juventude*, entre outros), o preenchimento manual de relatórios mensais gera:
-* **Perda de tempo:** Professores gastando horas formatando tabelas repetitivas no Word.
-* **Erros de padronização:** Desalinhamento de templates institucionais, fontes divergentes e perda de cabeçalhos/rodapés.
+* **Perda de tempo:** Professores gastando horas preenchendo tabelas repetitivas no Word.
 * **Falta de controle de entrega:** Relatórios espalhados por e-mails ou pendrives sem centralização em nuvem.
 
-Este sistema resolve esse gargalo através de um ecossistema integrado: desde a interface de cadastro de aulas diárias até a entrega do relatório assinado e organizado na hierarquia de pastas da instituição no Google Drive.
+Este sistema resolve esse gargalo através de um ecossistema integrado: desde a interface de registro de conteúdos das aulas até a entrega do relatório assinado e organizado na hierarquia de pastas da instituição no Google Drive.
 
 ---
 
 ## ✨ Principais Funcionalidades
 
 ### 🔐 1. Autenticação e Controle de Acesso
-* Sistema de login com validação de credenciais contra banco de dados relacional **SQLite**.
+* Sistema de login com validação de credenciais em banco de dados relacional **SQLite**.
 * Sessão persistente por professor com carregamento automático das disciplinas e templates vinculados.
 * Campo de senha com alternância de visibilidade e estilização refinada.
 
@@ -33,10 +32,10 @@ Este sistema resolve esse gargalo através de um ecossistema integrado: desde a 
 * Cadastro dinâmico de professores com criação automatizada de estrutura física de pastas.
 * Cadastro de novas disciplinas por professor com **auto-refresh reativo** na interface gráfica.
 
-### 📝 3. Cadastro Inteligente de Conteúdos
-* Seleção intuitiva de modelos pedagógicos com carregamento reativo de turmas vinculadas.
-* Opção de preenchimento por data atual ou seleção retroativa de datas.
-* Armazenamento estruturado no banco de dados com integridade referencial.
+### 📝 3. Registro de Conteúdos das Aulas
+* Seleção intuitiva de modelos pedagógicos com carregamento reativo das turmas vinculadas.
+* Opção de registro com a data atual ou seleção manual de datas retroativas.
+* Gravação direta dos conteúdos no relatório Word correspondente e arquivamento organizado na pasta local do professor.
 
 ### 📑 4. Engenharia de Documentos Word (`.docx`)
 * Preenchimento automatizado de templates Word preservando 100% da identidade visual institucional.
@@ -106,7 +105,7 @@ SistemaRelatorios/
 | **Python 3.12+** | Linguagem de programação principal |
 | **CustomTkinter** | Interface gráfica moderna com suporte nativo a Dark Theme e componentes customizados |
 | **Pillow (PIL)** | Manipulação e renderização de imagens, ícones e assinaturas digitais |
-| **SQLite3** | Banco de dados relacional embarcado para usuários, disciplinas, modelos e aulas |
+| **SQLite3** | Banco de dados relacional embarcado para gestão de usuários, disciplinas e modelos vinculados |
 | **python-docx** | Manipulação e preenchimento dinâmico de arquivos do Microsoft Word |
 | **Google Drive API v3** | Conexão com a nuvem, busca de diretórios e upload multipart de relatórios |
 | **Google Auth & OAuthlib** | Fluxo de autenticação OAuth 2.0 seguro com renovação automática de credenciais |
