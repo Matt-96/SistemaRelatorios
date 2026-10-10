@@ -74,14 +74,6 @@ def labelModeloRelatorio(frameModelo):
 
     return modeloRelatorio
 
-def criar_btnRadio1(frameInformacao, modelo_var,usuario, frameTurmas):
-    ctk.CTkRadioButton(frameInformacao, text="Juventude", font=("Roboto", 18),value="Juventude", variable=modelo_var,
-                       command=lambda: mostraTurmasPCM(usuario,modelo_var, frameTurmas)).grid(row=1,column=0, sticky="nw",pady=(0,10), padx=(20,0))
-
-
-def criar_btnRadio2(frameInformacao, modelo_var, usuario, frameTurmas):
-    ctk.CTkRadioButton(frameInformacao, text="PCM", font=("Roboto", 18), value="PCM",variable=modelo_var,
-                       command=lambda: mostraTurmasPCM(usuario,modelo_var, frameTurmas)).grid(row=2, column=0,sticky="nw", pady=(0,10), padx=(20,0))
 
 def labelConteudo(txtBox):
     ctk.CTkLabel(txtBox, text="Conteúdo", font=("Roboto", 23)).pack(side="top", anchor="nw", padx=20, pady=(15, 15))  # SUB-TITULO

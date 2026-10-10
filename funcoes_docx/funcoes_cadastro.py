@@ -97,27 +97,37 @@ def escreverConteudo(usuario, modelo_var, caixaDeTexto,  data_var, turmas, disci
 
     caminho_assinatura = buscar_caminho_assinatura(usuario)
 
+
+
+
     if not caminho_assinatura:
         messagebox.showwarning("Assinatura Ausente",
                                "Por favor, insira uma assinatura antes de cadastrar o relatório")
         return
+
+
+
+
     inserirData(doc,data_var, caminhoBackup)
     inserirAssinatura(doc, caminho_assinatura, usuario)
-    data = data_var
-    data_formatada = data.replace('/', '-')
 
-    if modelo_var.get() == "Juventude":
-        escreverJuventude(doc,conteudo)
+    try:
+        if modelo_var.get() == "Juventude":
 
-        doc.save(caminhoBackup)
+            escreverJuventude(doc,conteudo)
 
-    else:
+            doc.save(caminhoBackup)
 
-        print("VOU SALVAR EM:")
-        print(caminhoBackup)
+        else:
 
-        escreverPCM(doc, conteudo, turmas)
-        doc.save(caminhoBackup)
+            escreverPCM(doc, conteudo, turmas)
+            doc.save(caminhoBackup)
+
+
+        messagebox.showinfo(title="Sucesso",message="Conteúdo cadastrado com sucesso!")
+
+    except Exception as Erro:
+        messagebox.showwarning(title="Erro", message=f"Erro: {Erro}")
 
 def escreverJuventude(doc,conteudo):
     # LAÇO PARA LER AS LINHAS DO TEMPLATE

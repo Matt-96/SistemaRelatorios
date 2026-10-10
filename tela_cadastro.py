@@ -1,13 +1,13 @@
 import customtkinter as ctk
 from PIL import Image
 from componentes.botoes import criar_btnPersonalizado
-from componentes.conteinersTelaCadastro import criar_hearderImg, linhaDivisoria, criarCaixaConteudo, \
-    labelModeloRelatorio, criar_btnRadio1, criar_btnRadio2, labelConteudo, criarQuadroData, criar_frameTextos, \
+from componentes.conteinersTelaCadastro import  linhaDivisoria, criarCaixaConteudo, \
+    labelModeloRelatorio, labelConteudo, criarQuadroData, criar_frameTextos, \
     criar_frameInformacoes, criar_frameModelo, criar_frameTxtBox, criar_frameTurmas
-from componentes.objetosConteiner import criar_quadroCentral, criar_quadroPrincipal, limpar_tela
+from componentes.objetosConteiner import  limpar_tela
 from componentes.conteinersTelaCadastro import criarHeader
 from database import buscar_id_usuario, buscar_id_disciplina, listar_modelos
-from funcoes_docx.funcoes_cadastro import escreverConteudo, escolheTurma, carregarTemplate, mostraTurmasPCM
+from funcoes_docx.funcoes_cadastro import escreverConteudo, carregarTemplate, mostraTurmasPCM
 from constantes import MODELO_PCM
 
 def cadastrarConteudo(quadro_central, disciplina, usuario):
@@ -48,17 +48,7 @@ def cadastrarConteudo(quadro_central, disciplina, usuario):
 
     frameTurmas, menuOpcoes = criar_frameTurmas(frameModelo, usuario,nome_disciplina, MODELO_PCM)
 
-    #BOTOES DE RADIO
-    if not modelos:
-        ctk.CTkLabel(frameModelo, text="Nenhum projeto cadastrado", font=("Roboto", 16),
-                     text_color="#94A3B8").grid(row=1, column=0, sticky="nw", padx=(20, 0))
-    else:
-        cont = 0
-        for modelo in modelos:
-            menuTurmas = ctk.CTkRadioButton(frameModelo,text=modelo ,font=("Roboto",18),value=modelo,variable=modelo_var,
-            command=lambda:mostraTurmasPCM(usuario,modelo_var,frameTurmas)).grid(row=cont+1, column=0,sticky="nw",pady=(0,10), padx=(20,0)                   )
 
-            cont += 1
 
 
 
@@ -69,11 +59,36 @@ def cadastrarConteudo(quadro_central, disciplina, usuario):
     img = ctk.CTkImage(light_image=Image.open("imagens/cadastroBranco.png"),dark_image=Image.open("imagens/cadastroBranco.png"), size=(40,30))
     botaoCadastrar =  criar_btnPersonalizado(txtBox, text="Cadastrar", font=("Roboto",25), fg_color="#4124CC",
                                              height=55, corner_radius=12, border_color="white",
-                                             border_width=1, image=img, command=lambda :(carregarTemplate(usuario,modelo_var,data_var.get(),nome_disciplina),escreverConteudo(usuario,
+                                             border_width=1, image=img,state="disabled", command=lambda :(carregarTemplate(usuario,modelo_var,data_var.get(),nome_disciplina),escreverConteudo(usuario,
                                                                                                           modelo_var,
                                                                                                           caixaDeTexto,
                                                                                                           data_var.get(),
                                                                                                           menuOpcoes,
+
                                                                                                           nome_disciplina)))
     botaoCadastrar.pack(side="bottom",fill="both",padx=20)
+
+
+    def ativaBtn_cadastro():
+        botaoCadastrar.configure(state="normal")
+
+
+    # BOTOES DE RADIO
+    if not modelos:
+        ctk.CTkLabel(frameModelo, text="Nenhum projeto cadastrado", font=("Roboto", 16),
+                     text_color="#94A3B8").grid(row=1, column=0, sticky="nw", padx=(20, 0))
+        frameTurmas.configure(frameTurmas.grid_forget())
+        botaoCadastrar.configure(state="disabled")
+
+    else:
+        cont = 0
+        for modelo in modelos:
+            ctk.CTkRadioButton(frameModelo, text=modelo, font=("Roboto", 18), value=modelo,
+                                            variable=modelo_var,
+                                            command=lambda: (mostraTurmasPCM(usuario, modelo_var, frameTurmas),ativaBtn_cadastro())).grid(
+                row=cont + 1, column=0, sticky="nw", pady=(0, 10), padx=(20, 0))
+
+            cont += 1
+
+
 
